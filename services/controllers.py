@@ -4,10 +4,13 @@ from services.view import ModelView
 
 from django.db import transaction
 from django.utils.importlib import import_module
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.conf import settings
 from django.contrib.sessions.models import Session
+
+
+User = get_user_model()
+
 
 class GenericUserController(BaseController):
 

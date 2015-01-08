@@ -1,13 +1,17 @@
 from services.controller import BaseController
 import datetime
 import socket
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.mail import send_mail
 from services.apps.ops.models import ErrorReport
 from services import utils
 import logging
 logger = logging.getLogger('default')
+
+
+User = get_user_model()
+
 
 class StatusController(BaseController):
 
