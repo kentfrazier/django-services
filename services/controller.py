@@ -35,17 +35,17 @@ class BaseController(object):
         #django doesn't know PUT
         else:
             if request_method == "PUT":
-                request.PUT = QueryDict(request.raw_post_data)
+                request.PUT = QueryDict(request.body)
                 request.request_id = request.PUT.get('request_id')
                 request.POST = QueryDict({})
 
             if request_method == "DELETE":
-                request.DELETE = QueryDict(request.raw_post_data)
+                request.DELETE = QueryDict(request.body)
                 if not request.DELETE.keys():
                     request.DELETE = QueryDict(request.META['QUERY_STRING'])
                     request.POST = QueryDict({})
 
-         
+
 
         method_name = self.callmap.get(request_method, '')
 
@@ -116,7 +116,7 @@ class BaseController(object):
     def process_json_body(self, request):
         request_method = request.method.upper()
         try:
-            json_data = json.loads(request.raw_post_data)
+            json_data = json.loads(request.body)
             if request_method != 'GET':
                 request[request_method] =  QueryDict(json_data)
         except:
