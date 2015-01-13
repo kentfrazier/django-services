@@ -27,6 +27,7 @@ class BaseView(object):
         self.success = True
         self._data = {}
         self._status = 200
+        self._content_type = 'application/json'
         self.doc = None
         self.headers = {}
 
@@ -83,6 +84,10 @@ class BaseView(object):
     def set_status(self, status):
         assert isinstance(status, int)
         self._status = status
+
+    def set_content_type(self, content_type):
+        self._content_type = content_type
+        return self
 
     def render(self, request):
         return self._data
@@ -159,8 +164,12 @@ class BaseView(object):
         if response_body == '{}':
             response_body = ''
 
-        http_response = HttpResponse(response_body, status=self._status)
-        http_response['Content-Type'] = 'application/json'
+        if self._status == 204:
+            http_response = HttpResponse(status=204)
+        else:
+            http_response = HttpResponse(response_body, status=self._status)
+            if self._content_type is not None:
+                http_response['Content-Type'] = self._content_type
         return http_response
 
 class ListView(BaseView):
